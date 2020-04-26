@@ -3,12 +3,27 @@
 import { updateDirection } from './networking';
 
 function onMouseInput(e) {
-  handleInput(e.clientX, e.clientY);
+  // handleInput(e.clientX, e.clientY);
 }
 
 function onTouchInput(e) {
-  const touch = e.touches[0];
-  handleInput(touch.clientX, touch.clientY);
+  // const touch = e.touches[0];
+  // handleInput(touch.clientX, touch.clientY);
+}
+
+function onKeyInput(e) {
+  let dir;
+  if (e.keyCode === 37) { // left arrow
+    dir = 3 * Math.PI / 2.0;
+  } else if (e.keyCode === 38) { // up arrow
+    dir = 0;
+  } else if (e.keyCode === 39) { // right arrow
+    dir = Math.PI / 2.0;
+  } else if (e.keyCode === 40) { // down arrow
+    dir = Math.PI;
+  }
+
+  updateDirection(dir);
 }
 
 function handleInput(x, y) {
@@ -21,6 +36,7 @@ export function startCapturingInput() {
   window.addEventListener('click', onMouseInput);
   window.addEventListener('touchstart', onTouchInput);
   window.addEventListener('touchmove', onTouchInput);
+  window.addEventListener('keydown', onKeyInput);
 }
 
 export function stopCapturingInput() {

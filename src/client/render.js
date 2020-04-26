@@ -24,7 +24,7 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others, bullets } = getCurrentState();
+  const { me, others, bullets, trails } = getCurrentState();
   if (!me) {
     return;
   }
@@ -39,6 +39,9 @@ function render() {
 
   // Draw all bullets
   bullets.forEach(renderBullet.bind(null, me));
+
+  // Draw all trails
+  trails.forEach(renderTrail.bind(null, me));
 
   // Draw all players
   renderPlayer(me, me);
@@ -100,6 +103,17 @@ function renderPlayer(me, player) {
 
 function renderBullet(me, bullet) {
   const { x, y } = bullet;
+  context.drawImage(
+    getAsset('bullet.svg'),
+    canvas.width / 2 + x - me.x - BULLET_RADIUS,
+    canvas.height / 2 + y - me.y - BULLET_RADIUS,
+    BULLET_RADIUS * 2,
+    BULLET_RADIUS * 2,
+  );
+}
+
+function renderTrail(me, trail) {
+  const { x, y } = trail;
   context.drawImage(
     getAsset('bullet.svg'),
     canvas.width / 2 + x - me.x - BULLET_RADIUS,
