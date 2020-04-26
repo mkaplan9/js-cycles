@@ -1,10 +1,10 @@
 const ObjectClass = require('./object');
-const Bullet = require('./bullet');
+const Trail = require('./trail');
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
   constructor(id, username, x, y) {
-    super(id, x, y, Math.random() * 2 * Math.PI, Constants.PLAYER_SPEED);
+    super(id, x, y, (Math.floor(Math.random() * 4)) * Math.PI / 2, Constants.PLAYER_SPEED);
     this.username = username;
     this.hp = Constants.PLAYER_MAX_HP;
     this.fireCooldown = 0;
@@ -22,11 +22,20 @@ class Player extends ObjectClass {
     this.x = Math.max(0, Math.min(Constants.MAP_SIZE, this.x));
     this.y = Math.max(0, Math.min(Constants.MAP_SIZE, this.y));
 
-    // Fire a bullet, if needed
+    if (
+      (this.x >= Constants.MAP_SIZE) ||
+      (this.x <= 0) ||
+      (this.y >= Constants.MAP_SIZE) ||
+      (this.y <= 0)
+    ) {
+      this.hp = 0;
+    }
+
+    // Create a trail, if needed
     this.fireCooldown -= dt;
     if (this.fireCooldown <= 0) {
       this.fireCooldown += Constants.PLAYER_FIRE_COOLDOWN;
-      return new Bullet(this.id, this.x, this.y, this.direction);
+      return new Trail(this.id, this.x, this.y, this.direction);
     }
 
     return null;
