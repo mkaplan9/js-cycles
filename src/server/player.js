@@ -4,7 +4,7 @@ const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
   constructor(id, username, x, y) {
-    super(id, x, y, (Math.floor(Math.random() * 4)) * Math.PI / 2, Constants.PLAYER_SPEED);
+    super(id, x, y, x, y, (Math.floor(Math.random() * 4)) * Math.PI / 2, (Math.floor(Math.random() * 4)) * Math.PI / 2, Constants.PLAYER_SPEED);
     this.username = username;
     this.hp = Constants.PLAYER_MAX_HP;
     this.fireCooldown = 0;

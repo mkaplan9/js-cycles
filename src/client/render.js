@@ -90,11 +90,11 @@ function renderPlayer(me, player) {
 
 // Renders a ship at the given coordinates
 function renderPlayer2(player) {
-  const { x, y, direction } = player;
+  const { grid_x, grid_y, direction } = player;
 
   context.fillStyle = 'black';
-  context.clearRect(x * BLOCK_AREA, y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
-  context.fillRect(x * BLOCK_AREA, y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+  context.clearRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+  context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
 }
 
 function renderMainMenu() {
