@@ -6,8 +6,8 @@ class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
-    this.bullets = [];
     this.trails = [];
+    this.grid = new Array(Constants.GRID_SIZE).fill(0).map(() => new Array(Constants.GRID_SIZE).fill(0));
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
@@ -19,6 +19,18 @@ class Game {
     // Generate a position to start this player at.
     const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
+
+    // // Generate a grid position to start this player at.
+    // let x;
+    // let y;
+    // if (this.players.length == 0) {
+    //   x = Math.floor(Constants.GRID_SIZE / 4)
+    //   y = Math.floor(Constants.GRID_SIZE / 2)
+    // } else {
+    //   x = Math.floor(Constants.GRID_SIZE * (3 / 4))
+    //   y = Math.floor(Constants.GRID_SIZE / 2)
+    // }
+
     this.players[socket.id] = new Player(socket.id, username, x, y);
   }
 
@@ -50,6 +62,18 @@ class Game {
 
     // Apply collisions
     applyCollisions(Object.values(this.players), this.trails);
+
+    // // Update each player
+    // Object.keys(this.sockets).forEach(playerID => {
+    //   const player = this.players[playerID];
+    //   const {x, y} = player.update(dt);
+    //   if (newGridSquare) {
+    //     this.grid[x][y] = 1
+    //   }
+    // });
+
+    // // Apply collisions
+    // applyGridCollisions(Object.values(this.players), this.grid);
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {
@@ -83,18 +107,13 @@ class Game {
   }
 
   createUpdate(player, leaderboard) {
-    const nearbyPlayers = Object.values(this.players).filter(
-      p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    const otherPlayers = Object.values(this.players).filter(
+      p => p !== player,
     );
-    const nearbyBullets = this.bullets.filter(
-      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
-    );
-
     return {
       t: Date.now(),
       me: player.serializeForUpdate(),
-      others: nearbyPlayers.map(p => p.serializeForUpdate()),
-      bullets: nearbyBullets.map(b => b.serializeForUpdate()),
+      others: otherPlayers.map(p => p.serializeForUpdate()),
       trails: this.trails.map(t => t.serializeForUpdate()),
       leaderboard,
     };

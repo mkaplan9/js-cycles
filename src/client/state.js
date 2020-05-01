@@ -47,7 +47,7 @@ function getBaseUpdate() {
   return -1;
 }
 
-// Returns { me, others, bullets, trails }
+// Returns { me, others, trails }
 export function getCurrentState() {
   if (!firstServerTimestamp) {
     return {};
@@ -67,7 +67,6 @@ export function getCurrentState() {
     return {
       me: interpolateObject(baseUpdate.me, next.me, ratio),
       others: interpolateObjectArray(baseUpdate.others, next.others, ratio),
-      bullets: interpolateObjectArray(baseUpdate.bullets, next.bullets, ratio),
       trails: interpolateObjectArray(baseUpdate.trails, next.trails, ratio),
     };
   }
