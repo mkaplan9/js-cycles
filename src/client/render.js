@@ -29,22 +29,18 @@ function render() {
     return;
   }
 
-  renderBackground2();
-
-  // Draw boundaries
-  context.strokeStyle = 'black';
-  context.lineWidth = 1;
-  context.strokeRect(0, 0, MAP_SIZE, MAP_SIZE);
-
-  // Draw all trails
-  trails.forEach(renderTrail.bind(null, me));
-
   // Draw all players
   renderPlayer(me, me);
   others.forEach(renderPlayer.bind(null, me));
 }
 
 function renderBackground2() {
+  // Draw boundaries
+  context.strokeStyle = 'black';
+  context.lineWidth = 1;
+  context.strokeRect(0, 0, MAP_SIZE, MAP_SIZE);
+
+  // Draw grid
   for(let x=0; x<GRID_SIZE; x++) {
     for(let y=0; y<GRID_SIZE; y++) {
       const point = { x, y };
@@ -92,15 +88,13 @@ function renderPlayer(me, player) {
   context.restore();
 }
 
-function renderTrail(me, trail) {
-  const { x, y } = trail;
-  context.drawImage(
-    getAsset('bullet.svg'),
-    canvas.width / 2 + x - me.x - BULLET_RADIUS,
-    canvas.height / 2 + y - me.y - BULLET_RADIUS,
-    BULLET_RADIUS * 2,
-    BULLET_RADIUS * 2,
-  );
+// Renders a ship at the given coordinates
+function renderPlayer2(player) {
+  const { grid_x, grid_y, direction } = player;
+
+  context.fillStyle = 'black';
+  context.clearRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+  context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
 }
 
 function renderMainMenu() {
@@ -115,6 +109,7 @@ let renderInterval = setInterval(renderMainMenu, 1000 / 60);
 // Replaces main menu rendering with game rendering.
 export function startRendering() {
   clearInterval(renderInterval);
+  renderBackground2();
   renderInterval = setInterval(render, 1000 / 60);
 }
 
