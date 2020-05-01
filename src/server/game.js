@@ -107,18 +107,13 @@ class Game {
   }
 
   createUpdate(player, leaderboard) {
-    const nearbyPlayers = Object.values(this.players).filter(
-      p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    const otherPlayers = Object.values(this.players).filter(
+      p => p !== player,
     );
-    const nearbyBullets = this.bullets.filter(
-      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
-    );
-
     return {
       t: Date.now(),
       me: player.serializeForUpdate(),
-      others: nearbyPlayers.map(p => p.serializeForUpdate()),
-      bullets: nearbyBullets.map(b => b.serializeForUpdate()),
+      others: otherPlayers.map(p => p.serializeForUpdate()),
       trails: this.trails.map(t => t.serializeForUpdate()),
       leaderboard,
     };

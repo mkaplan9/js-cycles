@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, MAP_SIZE } = Constants;
+const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, MAP_SIZE, GRID_SIZE, BLOCK_SIZE, BLOCK_AREA } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -29,13 +29,12 @@ function render() {
     return;
   }
 
-  // Draw background
-  renderBackground(me.x, me.y);
+  renderBackground2();
 
   // Draw boundaries
   context.strokeStyle = 'black';
   context.lineWidth = 1;
-  context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
+  context.strokeRect(0, 0, MAP_SIZE, MAP_SIZE);
 
   // Draw all trails
   trails.forEach(renderTrail.bind(null, me));
@@ -43,6 +42,17 @@ function render() {
   // Draw all players
   renderPlayer(me, me);
   others.forEach(renderPlayer.bind(null, me));
+}
+
+function renderBackground2() {
+  for(let x=0; x<GRID_SIZE; x++) {
+    for(let y=0; y<GRID_SIZE; y++) {
+      const point = { x, y };
+      context.fillStyle = 'lightgrey';
+      context.clearRect(point.x * BLOCK_AREA, point.y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+      context.fillRect(point.x * BLOCK_AREA, point.y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+    }
+  }
 }
 
 function renderBackground(x, y) {
@@ -70,7 +80,7 @@ function renderPlayer(me, player) {
 
   // Draw ship
   context.save();
-  context.translate(canvasX, canvasY);
+  context.translate(x, y);
   context.rotate(direction);
   context.drawImage(
     getAsset('ship.svg'),
@@ -80,33 +90,6 @@ function renderPlayer(me, player) {
     PLAYER_RADIUS * 2,
   );
   context.restore();
-
-  // Draw health bar
-  context.fillStyle = 'white';
-  context.fillRect(
-    canvasX - PLAYER_RADIUS,
-    canvasY + PLAYER_RADIUS + 8,
-    PLAYER_RADIUS * 2,
-    2,
-  );
-  context.fillStyle = 'red';
-  context.fillRect(
-    canvasX - PLAYER_RADIUS + PLAYER_RADIUS * 2 * player.hp / PLAYER_MAX_HP,
-    canvasY + PLAYER_RADIUS + 8,
-    PLAYER_RADIUS * 2 * (1 - player.hp / PLAYER_MAX_HP),
-    2,
-  );
-}
-
-function renderBullet(me, bullet) {
-  const { x, y } = bullet;
-  context.drawImage(
-    getAsset('bullet.svg'),
-    canvas.width / 2 + x - me.x - BULLET_RADIUS,
-    canvas.height / 2 + y - me.y - BULLET_RADIUS,
-    BULLET_RADIUS * 2,
-    BULLET_RADIUS * 2,
-  );
 }
 
 function renderTrail(me, trail) {

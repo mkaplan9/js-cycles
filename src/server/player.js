@@ -31,7 +31,7 @@ class Player extends ObjectClass {
     this.fireCooldown -= dt;
     if (this.fireCooldown <= 0) {
       this.fireCooldown += Constants.PLAYER_FIRE_COOLDOWN;
-      return new Trail(this.id, this.x, this.y, this.direction);
+      // return new Trail(this.id, this.x, this.y, this.direction);
     }
 
     return null;
