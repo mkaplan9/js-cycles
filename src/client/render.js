@@ -24,7 +24,7 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others, bullets, trails } = getCurrentState();
+  const { me, others, trails } = getCurrentState();
   if (!me) {
     return;
   }
@@ -36,9 +36,6 @@ function render() {
   context.strokeStyle = 'black';
   context.lineWidth = 1;
   context.strokeRect(canvas.width / 2 - me.x, canvas.height / 2 - me.y, MAP_SIZE, MAP_SIZE);
-
-  // Draw all bullets
-  bullets.forEach(renderBullet.bind(null, me));
 
   // Draw all trails
   trails.forEach(renderTrail.bind(null, me));

@@ -22,4 +22,13 @@ function applyCollisions(players, bullets) {
   return destroyedBullets;
 }
 
+function applyGridCollisions(players, grid) {
+  for (let i = 0; i < players.length; i++) {
+    if (grid[player.x][player.y] == 1) {
+      player.takeGridDamage();
+    }
+  }
+}
+
+
 module.exports = applyCollisions;

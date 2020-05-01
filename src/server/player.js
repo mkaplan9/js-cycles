@@ -18,10 +18,6 @@ class Player extends ObjectClass {
     // Update score
     this.score += dt * Constants.SCORE_PER_SECOND;
 
-    // Make sure the player stays in bounds
-    this.x = Math.max(0, Math.min(Constants.MAP_SIZE, this.x));
-    this.y = Math.max(0, Math.min(Constants.MAP_SIZE, this.y));
-
     if (
       (this.x >= Constants.MAP_SIZE) ||
       (this.x <= 0) ||
@@ -43,6 +39,10 @@ class Player extends ObjectClass {
 
   takeBulletDamage() {
     this.hp -= Constants.BULLET_DAMAGE;
+  }
+
+  takeGridDamage() {
+    this.hp = 0;
   }
 
   onDealtDamage() {
