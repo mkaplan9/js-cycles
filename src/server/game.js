@@ -7,10 +7,14 @@ class Game {
     this.sockets = {};
     this.players = {};
     this.trails = [];
-    this.grid = new Array(Constants.GRID_SIZE).fill(0).map(() => new Array(Constants.GRID_SIZE).fill(0));
+    this.grid = this.initGrid();
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 30);
+  }
+
+  initGrid() {
+    return new Array(Constants.GRID_SIZE).fill(0).map(() => new Array(Constants.GRID_SIZE).fill(0));
   }
 
   addPlayer(socket, username) {
@@ -24,7 +28,7 @@ class Game {
     let grid_x;
     let grid_y;
     let grid_dir;
-    if (this.players.length == 0) {
+    if (Object.keys(this.players).length === 0) {
       grid_x = Math.floor(Constants.GRID_SIZE / 4)
       grid_y = Math.floor(Constants.GRID_SIZE / 2)
       grid_dir = Constants.RIGHT;
@@ -33,6 +37,10 @@ class Game {
       grid_y = Math.floor(Constants.GRID_SIZE / 2)
       grid_dir = Constants.LEFT;
     }
+
+    console.log(this.players)
+    console.log(grid_dir)
+    console.log("&&&&&&&&")
 
     this.players[socket.id] = new Player(socket.id, username, x, y, grid_x, grid_y, grid_dir);
   }
@@ -49,7 +57,7 @@ class Game {
   }
 
   update() {
-    console.log("^^^^^^^^^^^^^^^")
+    // console.log("^^^^^^^^^^^^^^^")
     // Calculate time elapsed
     const now = Date.now();
     const dt = (now - this.lastUpdateTime) / 1000;
@@ -68,25 +76,11 @@ class Game {
 
     // Update grid
     grid_updates.forEach(grid_pos => {
-      const {grid_x, grid_y} = grid_pos;
-      this.grid[grid_x][grid_y] = 1;
-    });
-
-    // console.log("*********")
-    for(let x=0; x<Constants.GRID_SIZE; x++) {
-      for(let y=0; y<Constants.GRID_SIZE; y++) {
-        if (this.grid[x][y] == 1){
-          console.log(x, " , ", y)
-        }
+      if (grid_pos) {
+        const {grid_x, grid_y} = grid_pos;
+        this.grid[grid_x][grid_y] = 1;
       }
-    }
-    console.log("*********")
-
-    // Apply collisions
-    // applyCollisions(Object.values(this.players), this.trails);
-
-    // // Apply collisions
-    // applyGridCollisions(Object.values(this.players), this.grid);
+    });
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {
@@ -95,6 +89,7 @@ class Game {
       if (player.hp <= 0) {
         socket.emit(Constants.MSG_TYPES.GAME_OVER);
         this.removePlayer(socket);
+        this.grid = this.initGrid();
       }
     });
 

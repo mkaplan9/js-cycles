@@ -25,8 +25,18 @@ function applyCollisions(players, bullets) {
 function applyGridCollisions(players, grid) {
   for (let i = 0; i < players.length; i++) {
     player = players[i];
-    if (grid[player.grid_x][player.grid_y] == 1) {
-      console.log("DEAD")
+
+    if (
+      (player.grid_x >= Constants.GRID_SIZE) ||
+      (player.grid_x < 0) ||
+      (player.grid_y >= Constants.GRID_SIZE) ||
+      (player.grid_y < 0)
+    ) {
+      console.log("DEAD: EDGE")
+      player.takeGridDamage();
+    } else if (grid[player.grid_x][player.grid_y] == 1) {
+      console.log("DEAD: TAIL")
+      console.log(grid)
       player.takeGridDamage();
     }
   }

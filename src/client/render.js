@@ -30,7 +30,7 @@ function render() {
   }
 
   // Draw all players
-  renderPlayer(me, me);
+  renderPlayer2(me, me);
   others.forEach(renderPlayer.bind(null, me));
 }
 

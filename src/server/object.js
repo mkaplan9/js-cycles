@@ -32,9 +32,7 @@ class Object {
     }
 
     console.log(this.grid_dir)
-    console.log(this.x)
     console.log(this.grid_x)
-    console.log(this.y)
     console.log(this.grid_y)
     console.log("__________________")
   }
@@ -46,6 +44,7 @@ class Object {
   }
 
   setDirection(dir, grid_dir) {
+    console.log("Set dir")
     this.direction = dir;
 
     if (!this.opposites(grid_dir, this.grid_dir)) {
