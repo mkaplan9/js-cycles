@@ -1,5 +1,5 @@
 {
-  "name": "io-game-from-scratch",
+  "name": "js-cycles",
   "version": "1.0.0",
   "description": "",
   "main": "src/server/server.js",
@@ -10,13 +10,16 @@
     "start": "cross-env NODE_ENV=production node src/server/server.js",
     "test": "jest"
   },
-  "author": "Victor Zhou",
+  "author": "Max Kaplan",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "cross-env": "^5.2.1",
     "express": "^4.17.1",
     "html-webpack-plugin": "^3.2.0",
     "lodash": "^4.17.15",
+    "node": "^14.0.0",
+    "npm": "^6.14.4",
     "shortid": "^2.2.15",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
@@ -29,7 +32,6 @@
     "@babel/preset-env": "^7.7.4",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
-    "cross-env": "^5.2.1",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
