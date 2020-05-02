@@ -3,38 +3,27 @@ const Trail = require('./trail');
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
-  constructor(id, username, x, y) {
-    super(id, x, y, x, y, (Math.floor(Math.random() * 4)) * Math.PI / 2, (Math.floor(Math.random() * 4)) * Math.PI / 2, Constants.PLAYER_SPEED);
+  constructor(id, username, x, y, grid_x, grid_y, grid_dir) {
+    super(id, x, y, grid_x, grid_y, (Math.floor(Math.random() * 4)) * Math.PI / 2, grid_dir, Constants.PLAYER_SPEED);
     this.username = username;
     this.hp = Constants.PLAYER_MAX_HP;
     this.fireCooldown = 0;
     this.score = 0;
   }
 
-  // Returns a newly created bullet, or null.
   update(dt) {
     super.update(dt);
 
-    // Update score
-    this.score += dt * Constants.SCORE_PER_SECOND;
-
     if (
-      (this.x >= Constants.MAP_SIZE) ||
-      (this.x <= 0) ||
-      (this.y >= Constants.MAP_SIZE) ||
-      (this.y <= 0)
+      (this.grid_x >= Constants.GRID_SIZE) ||
+      (this.grid_x < 0) ||
+      (this.grid_y >= Constants.GRID_SIZE) ||
+      (this.grid_y < 0)
     ) {
-      this.hp = 0;
+      return null;
     }
 
-    // Create a trail, if needed
-    this.fireCooldown -= dt;
-    if (this.fireCooldown <= 0) {
-      this.fireCooldown += Constants.PLAYER_FIRE_COOLDOWN;
-      // return new Trail(this.id, this.x, this.y, this.direction);
-    }
-
-    return null;
+    return { grid_x: this.grid_x, grid_y: this.grid_y };
   }
 
   takeBulletDamage() {

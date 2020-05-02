@@ -1,3 +1,5 @@
+const Constants = require('../shared/constants');
+
 class Object {
   constructor(id, x, y, grid_x, grid_y, dir, grid_dir, speed) {
     this.id = id;
@@ -13,11 +15,26 @@ class Object {
   update(dt) {
     this.x += dt * this.speed * Math.sin(this.direction);
     this.y -= dt * this.speed * Math.cos(this.direction);
-  }
 
-  update_grid(dt) {
-    this.x += dt * this.speed * Math.sin(this.direction);
-    this.y -= dt * this.speed * Math.cos(this.direction);
+    switch(this.grid_dir) {
+      case Constants.LEFT:
+        this.grid_x--;
+        break;
+      case Constants.UP:
+        this.grid_y--;
+        break;
+      case Constants.RIGHT:
+        this.grid_x++;
+        break;
+      case Constants.DOWN:
+        this.grid_y++;
+        break;
+    }
+
+    console.log(this.grid_dir)
+    console.log(this.grid_x)
+    console.log(this.grid_y)
+    console.log("__________________")
   }
 
   distanceTo(object) {
@@ -26,8 +43,19 @@ class Object {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-  setDirection(dir) {
+  setDirection(dir, grid_dir) {
+    console.log("Set dir")
     this.direction = dir;
+
+    if (!this.opposites(grid_dir, this.grid_dir)) {
+      this.grid_dir = grid_dir;
+    }
+  }
+
+  opposites(dir_1, dir_2) {
+    const rl = [dir_1, dir_2].includes(Constants.LEFT) && [dir_1, dir_2].includes(Constants.RIGHT);
+    const ud = [dir_1, dir_2].includes(Constants.UP) && [dir_1, dir_2].includes(Constants.DOWN);
+    return rl || ud;
   }
 
   serializeForUpdate() {

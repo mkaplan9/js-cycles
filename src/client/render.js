@@ -24,13 +24,13 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others, trails } = getCurrentState();
+  const { me, others } = getCurrentState();
   if (!me) {
     return;
   }
 
   // Draw all players
-  renderPlayer(me, me);
+  renderPlayer2(me, me);
   others.forEach(renderPlayer.bind(null, me));
 }
 
