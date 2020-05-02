@@ -24,7 +24,7 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others, trails } = getCurrentState();
+  const { me, others } = getCurrentState();
   if (!me) {
     return;
   }

@@ -24,11 +24,13 @@ function applyCollisions(players, bullets) {
 
 function applyGridCollisions(players, grid) {
   for (let i = 0; i < players.length; i++) {
-    if (grid[player.x][player.y] == 1) {
+    player = players[i];
+    if (grid[player.grid_x][player.grid_y] == 1) {
+      console.log("DEAD")
       player.takeGridDamage();
     }
   }
 }
 
 
-module.exports = applyCollisions;
+module.exports = applyGridCollisions;
