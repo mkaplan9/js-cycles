@@ -2,8 +2,8 @@ const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
-  constructor(id, username, x, y, grid_x, grid_y, grid_dir) {
-    super(id, x, y, grid_x, grid_y, (Math.floor(Math.random() * 4)) * Math.PI / 2, grid_dir, Constants.PLAYER_SPEED);
+  constructor(id, username, x, y, grid_x, grid_y, grid_dir, color) {
+    super(id, x, y, grid_x, grid_y, (Math.floor(Math.random() * 4)) * Math.PI / 2, grid_dir, Constants.PLAYER_SPEED, color);
     this.username = username;
     this.hp = Constants.PLAYER_MAX_HP;
     this.fireCooldown = 0;

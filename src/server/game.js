@@ -32,17 +32,20 @@ class Game {
     let grid_x;
     let grid_y;
     let grid_dir;
+    let color;
     if (Object.keys(this.players).length === 0) {
       grid_x = Math.floor(Constants.GRID_SIZE / 4)
       grid_y = Math.floor(Constants.GRID_SIZE / 2)
       grid_dir = Constants.RIGHT;
+      color = '#6FC3DF';
     } else {
       grid_x = Math.floor(Constants.GRID_SIZE * (3 / 4))
       grid_y = Math.floor(Constants.GRID_SIZE / 2)
       grid_dir = Constants.LEFT;
+      color = '#DF740C';
     }
 
-    this.players[socket.id] = new Player(socket.id, username, x, y, grid_x, grid_y, grid_dir);
+    this.players[socket.id] = new Player(socket.id, username, x, y, grid_x, grid_y, grid_dir, color);
   }
 
   removePlayer(socket) {
@@ -57,13 +60,10 @@ class Game {
   }
 
   shouldStartGame() {
-    console.log("shouldStartGame")
-    console.log(Object.keys(this.players).length)
     this.gameLive = Object.keys(this.players).length > 1
   }
 
   removeAllPlayers() {
-    console.log("Removing all")
     Object.values(this.sockets).forEach(socket => {
       socket.emit(Constants.MSG_TYPES.GAME_OVER);
       this.removePlayer(socket);
