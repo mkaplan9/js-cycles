@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, BULLET_RADIUS, MAP_SIZE, GRID_SIZE, BLOCK_SIZE, BLOCK_AREA } = Constants;
+const { MAP_SIZE, GRID_SIZE, BLOCK_SIZE, BLOCK_AREA } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -31,7 +31,7 @@ function render() {
 
   // Draw all players
   renderPlayer2(me, me);
-  others.forEach(renderPlayer.bind(null, me));
+  others.forEach(renderPlayer2.bind(null, me));
 }
 
 function renderBackground2() {
@@ -66,26 +66,6 @@ function renderBackground(x, y) {
   backgroundGradient.addColorStop(1, 'gray');
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-// Renders a ship at the given coordinates
-function renderPlayer(me, player) {
-  const { x, y, direction } = player;
-  const canvasX = canvas.width / 2 + x - me.x;
-  const canvasY = canvas.height / 2 + y - me.y;
-
-  // Draw ship
-  context.save();
-  context.translate(x, y);
-  context.rotate(direction);
-  context.drawImage(
-    getAsset('ship.svg'),
-    -PLAYER_RADIUS,
-    -PLAYER_RADIUS,
-    PLAYER_RADIUS * 2,
-    PLAYER_RADIUS * 2,
-  );
-  context.restore();
 }
 
 // Renders a ship at the given coordinates

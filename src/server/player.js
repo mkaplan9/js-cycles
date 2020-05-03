@@ -1,5 +1,4 @@
 const ObjectClass = require('./object');
-const Trail = require('./trail');
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
