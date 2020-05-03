@@ -43,10 +43,9 @@ function renderBackground2() {
   // Draw grid
   for(let x=0; x<GRID_SIZE; x++) {
     for(let y=0; y<GRID_SIZE; y++) {
-      const point = { x, y };
       context.fillStyle = 'lightgrey';
-      context.clearRect(point.x * BLOCK_AREA, point.y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
-      context.fillRect(point.x * BLOCK_AREA, point.y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+      context.clearRect(x * BLOCK_AREA, y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+      context.fillRect(x * BLOCK_AREA, y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
     }
   }
 }
@@ -70,9 +69,9 @@ function renderBackground(x, y) {
 
 // Renders a ship at the given coordinates
 function renderPlayer2(player) {
-  const { grid_x, grid_y } = player;
+  const { grid_x, grid_y, color } = player;
 
-  context.fillStyle = 'black';
+  context.fillStyle = color;
   context.clearRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
   context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
 }

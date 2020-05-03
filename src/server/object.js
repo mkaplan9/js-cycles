@@ -1,7 +1,7 @@
 const Constants = require('../shared/constants');
 
 class Object {
-  constructor(id, x, y, grid_x, grid_y, dir, grid_dir, speed) {
+  constructor(id, x, y, grid_x, grid_y, dir, grid_dir, speed, color) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -10,6 +10,7 @@ class Object {
     this.direction = dir;
     this.grid_dir = grid_dir;
     this.speed = speed;
+    this.color = color;
   }
 
   update(dt) {
@@ -59,6 +60,7 @@ class Object {
       y: this.y,
       grid_x: this.grid_x,
       grid_y: this.grid_y,
+      color: this.color,
     };
   }
 }
