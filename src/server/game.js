@@ -6,7 +6,6 @@ class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
-    this.trails = [];
     this.grid = this.initGrid();
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
@@ -118,7 +117,6 @@ class Game {
       t: Date.now(),
       me: player.serializeForUpdate(),
       others: otherPlayers.map(p => p.serializeForUpdate()),
-      trails: this.trails.map(t => t.serializeForUpdate()),
       leaderboard,
     };
   }

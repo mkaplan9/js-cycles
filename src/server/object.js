@@ -39,7 +39,6 @@ class Object {
   }
 
   setDirection(dir, grid_dir) {
-    console.log("Set dir")
     this.direction = dir;
 
     if (!this.opposites(grid_dir, this.grid_dir)) {
