@@ -30,11 +30,6 @@ class Object {
         this.grid_y++;
         break;
     }
-
-    console.log(this.grid_dir)
-    console.log(this.grid_x)
-    console.log(this.grid_y)
-    console.log("__________________")
   }
 
   distanceTo(object) {

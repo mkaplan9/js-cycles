@@ -38,10 +38,6 @@ class Game {
       grid_dir = Constants.LEFT;
     }
 
-    console.log(this.players)
-    console.log(grid_dir)
-    console.log("&&&&&&&&")
-
     this.players[socket.id] = new Player(socket.id, username, x, y, grid_x, grid_y, grid_dir);
   }
 
