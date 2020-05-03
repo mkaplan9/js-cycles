@@ -30,8 +30,8 @@ function render() {
   }
 
   // Draw all players
-  renderPlayer2(me, me);
-  others.forEach(renderPlayer2.bind(null, me));
+  renderPlayer2(me);
+  others.forEach(renderPlayer2.bind(null));
 }
 
 function renderBackground2() {
@@ -70,7 +70,7 @@ function renderBackground(x, y) {
 
 // Renders a ship at the given coordinates
 function renderPlayer2(player) {
-  const { grid_x, grid_y, direction } = player;
+  const { grid_x, grid_y } = player;
 
   context.fillStyle = 'black';
   context.clearRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);

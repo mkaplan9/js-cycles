@@ -9,11 +9,16 @@ class Game {
     this.grid = this.initGrid();
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
-    setInterval(this.update.bind(this), 1000 / 30);
+    this.gameLive = false;
+    setInterval(this.update.bind(this), 1000 / 10);
   }
 
   initGrid() {
     return new Array(Constants.GRID_SIZE).fill(0).map(() => new Array(Constants.GRID_SIZE).fill(0));
+  }
+
+  canAddPlayer() {
+    return Object.keys(this.players).length < 2
   }
 
   addPlayer(socket, username) {
@@ -51,8 +56,25 @@ class Game {
     }
   }
 
+  shouldStartGame() {
+    console.log("shouldStartGame")
+    console.log(Object.keys(this.players).length)
+    this.gameLive = Object.keys(this.players).length > 1
+  }
+
+  removeAllPlayers() {
+    console.log("Removing all")
+    Object.values(this.sockets).forEach(socket => {
+      socket.emit(Constants.MSG_TYPES.GAME_OVER);
+      this.removePlayer(socket);
+    })
+  }
+
   update() {
-    // console.log("^^^^^^^^^^^^^^^")
+    if (!this.gameLive) {
+      this.shouldStartGame();
+      return;
+    }
     // Calculate time elapsed
     const now = Date.now();
     const dt = (now - this.lastUpdateTime) / 1000;
@@ -78,15 +100,19 @@ class Game {
     });
 
     // Check if any players are dead
-    Object.keys(this.sockets).forEach(playerID => {
+
+    const socketsArray = Object.entries(this.sockets);
+    for(let i=0; i<Object.keys(this.players).length; i++) {
+      const playerID = socketsArray[i][0];
       const socket = this.sockets[playerID];
       const player = this.players[playerID];
       if (player.hp <= 0) {
-        socket.emit(Constants.MSG_TYPES.GAME_OVER);
-        this.removePlayer(socket);
+        this.removeAllPlayers();
+        this.gameLive = false;
         this.grid = this.initGrid();
+        break;
       }
-    });
+    }
 
     // Send a game update to each player every other time
     if (this.shouldSendUpdate) {
