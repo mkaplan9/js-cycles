@@ -7,6 +7,7 @@ import { getCurrentState } from './state';
 const Constants = require('../shared/constants');
 
 const { MAP_SIZE, GRID_SIZE, BLOCK_SIZE, BLOCK_AREA } = Constants;
+const hasRenderedID = false;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -29,6 +30,10 @@ function render() {
     return;
   }
 
+  if (!hasRenderedID) {
+    renderID(me);
+  }
+
   // Draw all players
   renderPlayer2(me);
   others.forEach(renderPlayer2.bind(null));
@@ -37,8 +42,10 @@ function render() {
 function renderBackground2() {
   // Draw boundaries
   context.strokeStyle = 'black';
+  context.fillStyle = 'black';
   context.lineWidth = 1;
   context.strokeRect(0, 0, MAP_SIZE, MAP_SIZE);
+  context.fillRect(0, 0, MAP_SIZE, MAP_SIZE);
 
   // Draw grid
   for(let x=0; x<GRID_SIZE; x++) {
@@ -50,21 +57,9 @@ function renderBackground2() {
   }
 }
 
-function renderBackground(x, y) {
-  const backgroundX = MAP_SIZE / 2 - x + canvas.width / 2;
-  const backgroundY = MAP_SIZE / 2 - y + canvas.height / 2;
-  const backgroundGradient = context.createRadialGradient(
-    backgroundX,
-    backgroundY,
-    MAP_SIZE / 10,
-    backgroundX,
-    backgroundY,
-    MAP_SIZE / 2,
-  );
-  backgroundGradient.addColorStop(0, 'black');
-  backgroundGradient.addColorStop(1, 'gray');
-  context.fillStyle = backgroundGradient;
-  context.fillRect(0, 0, canvas.width, canvas.height);
+function renderID(me) {
+  context.font = '50px serif';
+  context.fillText('Your color', 10, MAP_SIZE + 100);
 }
 
 // Renders a ship at the given coordinates
@@ -76,14 +71,7 @@ function renderPlayer2(player) {
   context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
 }
 
-function renderMainMenu() {
-  const t = Date.now() / 7500;
-  const x = MAP_SIZE / 2 + 800 * Math.cos(t);
-  const y = MAP_SIZE / 2 + 800 * Math.sin(t);
-  renderBackground(x, y);
-}
-
-let renderInterval = setInterval(renderMainMenu, 1000 / 60);
+let renderInterval
 
 // Replaces main menu rendering with game rendering.
 export function startRendering() {
@@ -95,5 +83,4 @@ export function startRendering() {
 // Replaces game rendering with main menu rendering.
 export function stopRendering() {
   clearInterval(renderInterval);
-  renderInterval = setInterval(renderMainMenu, 1000 / 60);
 }

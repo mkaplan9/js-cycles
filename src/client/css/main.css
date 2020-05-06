@@ -38,7 +38,7 @@ button:focus {
   height: 100%;
 }
 
-#play-menu {
+.menu {
   position: fixed;
   top: 50%;
   left: 50%;

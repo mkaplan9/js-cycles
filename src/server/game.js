@@ -48,9 +48,9 @@ class Game {
     this.players[socket.id] = new Player(socket.id, username, x, y, grid_x, grid_y, grid_dir, color);
   }
 
-  removePlayer(socket) {
-    delete this.sockets[socket.id];
-    delete this.players[socket.id];
+  removePlayer(socketID) {
+    delete this.sockets[socketID];
+    delete this.players[socketID];
   }
 
   handleInput(socket, dir, grid_dir) {
@@ -63,10 +63,11 @@ class Game {
     this.gameLive = Object.keys(this.players).length > 1
   }
 
-  removeAllPlayers() {
-    Object.values(this.sockets).forEach(socket => {
-      socket.emit(Constants.MSG_TYPES.GAME_OVER);
-      this.removePlayer(socket);
+  removeAllPlayers(loserID) {
+    Object.keys(this.sockets).forEach(socketID => {
+      const won = loserID != socketID
+      this.sockets[socketID].emit(Constants.MSG_TYPES.GAME_OVER, won);
+      this.removePlayer(socketID);
     })
   }
 
@@ -100,14 +101,13 @@ class Game {
     });
 
     // Check if any players are dead
-
     const socketsArray = Object.entries(this.sockets);
     for(let i=0; i<Object.keys(this.players).length; i++) {
       const playerID = socketsArray[i][0];
       const socket = this.sockets[playerID];
       const player = this.players[playerID];
       if (player.hp <= 0) {
-        this.removeAllPlayers();
+        this.removeAllPlayers(playerID);
         this.gameLive = false;
         this.grid = this.initGrid();
         break;

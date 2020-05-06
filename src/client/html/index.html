@@ -20,7 +20,7 @@
 </head>
 <body>
   <canvas id="game-canvas"></canvas>
-  <div id="play-menu" class="hidden">
+  <div id="play-menu" class="hidden menu">
     <h1>JS Cycles</h1>
     <p>
       Stay alive don't hit the walls or the trails
@@ -35,6 +35,12 @@
     <hr />
     <input type="text" id="username-input" placeholder="Username" />
     <button id="play-button">PLAY</button>
+  </div>
+  <div id="game-over-menu" class="hidden menu">
+    <h1>Game Over</h1>
+    <h2 id="you-won" class="hidden">You Won</h2>
+    <h2 id="you-lost" class="hidden">You Lost</h2>
+    <button id="play-again-button">Play Again?</button>
   </div>
   <div id="leaderboard" class="hidden">
     <table>
