@@ -7,7 +7,7 @@ import { getCurrentState } from './state';
 const Constants = require('../shared/constants');
 
 const { MAP_SIZE, GRID_SIZE, BLOCK_SIZE, BLOCK_AREA } = Constants;
-const hasRenderedID = false;
+let hasRenderedID = false;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -31,7 +31,9 @@ function render() {
   }
 
   if (!hasRenderedID) {
-    renderID(me);
+    renderID();
+    renderColorSquare(me.color);
+    hasRenderedID = true;
   }
 
   // Draw all players
@@ -57,9 +59,16 @@ function renderBackground2() {
   }
 }
 
-function renderID(me) {
+function renderID() {
   context.font = '50px serif';
+  context.fillStyle = 'white';
   context.fillText('Your color', 10, MAP_SIZE + 100);
+}
+
+function renderColorSquare(color) {
+  context.fillStyle = color;
+  context.clearRect(250, MAP_SIZE + 50, 50, 50);
+  context.fillRect(250, MAP_SIZE + 50, 50, 50);
 }
 
 // Renders a ship at the given coordinates
@@ -77,6 +86,8 @@ let renderInterval
 export function startRendering() {
   clearInterval(renderInterval);
   renderBackground2();
+  renderColorSquare('black');
+  hasRenderedID = false;
   renderInterval = setInterval(render, 1000 / 60);
 }
 
