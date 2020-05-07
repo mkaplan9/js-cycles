@@ -71,12 +71,11 @@ function renderColorSquare(color) {
   context.fillRect(250, MAP_SIZE + 50, 50, 50);
 }
 
-// Renders a ship at the given coordinates
+// Renders a snake at the given coordinates
 function renderPlayer2(player) {
   const { grid_x, grid_y, color } = player;
 
   context.fillStyle = color;
-  context.clearRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
   context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
 }
 

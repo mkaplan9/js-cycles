@@ -111,7 +111,7 @@ class Game {
     }
 
     // Send a game update to each player every other time
-    if (this.shouldSendUpdate) {
+    if (true) {
       const leaderboard = this.getLeaderboard();
       Object.keys(this.sockets).forEach(playerID => {
         const socket = this.sockets[playerID];
