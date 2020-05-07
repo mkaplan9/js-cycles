@@ -6,7 +6,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { MAP_SIZE, GRID_SIZE, BLOCK_SIZE, BLOCK_AREA } = Constants;
+const { MAP_SIZE, GRID_SIZE, BLOCK_AREA, MARGIN } = Constants;
 let hasRenderedID = false;
 
 // Get the canvas graphics context
@@ -50,11 +50,13 @@ function renderBackground2() {
   context.fillRect(0, 0, MAP_SIZE, MAP_SIZE);
 
   // Draw grid
-  for(let x=0; x<GRID_SIZE; x++) {
-    for(let y=0; y<GRID_SIZE; y++) {
+  const grid_block_area = BLOCK_AREA * 4;
+  const grid_block_size = grid_block_area - MARGIN;
+  for(let x=0; x<GRID_SIZE/4; x++) {
+    for(let y=0; y<GRID_SIZE/4; y++) {
       context.fillStyle = 'lightgrey';
-      context.clearRect(x * BLOCK_AREA, y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
-      context.fillRect(x * BLOCK_AREA, y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+      context.clearRect(x * grid_block_area, y * grid_block_area, grid_block_size, grid_block_size);
+      context.fillRect(x * grid_block_area, y * grid_block_area, grid_block_size, grid_block_size);
     }
   }
 }
@@ -76,7 +78,7 @@ function renderPlayer2(player) {
   const { grid_x, grid_y, color } = player;
 
   context.fillStyle = color;
-  context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_SIZE, BLOCK_SIZE);
+  context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_AREA, BLOCK_AREA);
 }
 
 let renderInterval
