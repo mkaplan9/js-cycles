@@ -1,22 +1,16 @@
 const Constants = require('../shared/constants');
 
 class Object {
-  constructor(id, x, y, grid_x, grid_y, dir, grid_dir, speed, color) {
+  constructor(id, grid_x, grid_y, grid_dir, speed, color) {
     this.id = id;
-    this.x = x;
-    this.y = y;
     this.grid_x = grid_x;
     this.grid_y = grid_y;
-    this.direction = dir;
     this.grid_dir = grid_dir;
     this.speed = speed;
     this.color = color;
   }
 
   update(dt) {
-    this.x += dt * this.speed * Math.sin(this.direction);
-    this.y -= dt * this.speed * Math.cos(this.direction);
-
     switch(this.grid_dir) {
       case Constants.LEFT:
         this.grid_x--;
@@ -33,15 +27,7 @@ class Object {
     }
   }
 
-  distanceTo(object) {
-    const dx = this.x - object.x;
-    const dy = this.y - object.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  setDirection(dir, grid_dir) {
-    this.direction = dir;
-
+  setDirection(grid_dir) {
     if (!this.opposites(grid_dir, this.grid_dir)) {
       this.grid_dir = grid_dir;
     }
@@ -56,8 +42,6 @@ class Object {
   serializeForUpdate() {
     return {
       id: this.id,
-      x: this.x,
-      y: this.y,
       grid_x: this.grid_x,
       grid_y: this.grid_y,
       color: this.color,

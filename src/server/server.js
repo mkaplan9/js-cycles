@@ -48,8 +48,8 @@ function joinGame(username) {
   }
 }
 
-function handleInput(dir, grid_dir) {
-  game.handleInput(this, dir, grid_dir);
+function handleInput(grid_dir) {
+  game.handleInput(this, grid_dir);
 }
 
 function onDisconnect() {
