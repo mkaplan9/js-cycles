@@ -49,9 +49,11 @@ class Game {
     delete this.players[socketID];
   }
 
-  handleInput(socket, dir, grid_dir) {
-    if (this.players[socket.id]) {
-      this.players[socket.id].setDirection(dir, grid_dir);
+  handleInput(socket, grid_dir) {
+    if (this.gameLive) {
+      if (this.players[socket.id]) {
+        this.players[socket.id].setDirection(grid_dir);
+      }
     }
   }
 

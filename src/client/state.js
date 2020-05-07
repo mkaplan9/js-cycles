@@ -6,11 +6,12 @@ import { updateLeaderboard } from './leaderboard';
 // This makes gameplay smoother and lag less noticeable.
 const RENDER_DELAY = 100;
 
-const gameUpdates = [];
+let gameUpdates = [];
 let gameStart = 0;
 let firstServerTimestamp = 0;
 
 export function initState() {
+  gameUpdates = [];
   gameStart = 0;
   firstServerTimestamp = 0;
 }
