@@ -13,22 +13,18 @@ function onTouchInput(e) {
 }
 
 function onKeyInput(e) {
-  let dir, grid_dir;
+  let grid_dir;
   if (e.keyCode === 37) { // left arrow
-    dir = 3 * Math.PI / 2.0;
     grid_dir = Constants.LEFT;
   } else if (e.keyCode === 38) { // up arrow
-    dir = 0;
     grid_dir = Constants.UP;
   } else if (e.keyCode === 39) { // right arrow
-    dir = Math.PI / 2.0;
     grid_dir = Constants.RIGHT;
   } else if (e.keyCode === 40) { // down arrow
-    dir = Math.PI;
     grid_dir = Constants.DOWN;
   }
 
-  updateDirection(dir, grid_dir);
+  updateDirection(grid_dir);
 }
 
 export function startCapturingInput() {

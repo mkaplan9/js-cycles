@@ -6,11 +6,12 @@ import { updateLeaderboard } from './leaderboard';
 // This makes gameplay smoother and lag less noticeable.
 const RENDER_DELAY = 100;
 
-const gameUpdates = [];
+let gameUpdates = [];
 let gameStart = 0;
 let firstServerTimestamp = 0;
 
 export function initState() {
+  gameUpdates = [];
   gameStart = 0;
   firstServerTimestamp = 0;
 }
@@ -32,6 +33,7 @@ export function processGameUpdate(update) {
 }
 
 function currentServerTime() {
+  // serverTime + (time since game start) - delay
   return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY;
 }
 
@@ -78,10 +80,8 @@ function interpolateObject(object1, object2, ratio) {
 
   const interpolated = {};
   Object.keys(object1).forEach(key => {
-    if (key === 'direction') {
-      interpolated[key] = interpolateDirection(object1[key], object2[key], ratio);
-    } else if (key === 'color') {
-      interpolated['color'] = object1[key];
+    if ((key === 'color') || (key === 'id')) {
+      interpolated[key] = object1[key];
     } else {
       interpolated[key] = object1[key] + (object2[key] - object1[key]) * ratio;
     }
@@ -91,22 +91,4 @@ function interpolateObject(object1, object2, ratio) {
 
 function interpolateObjectArray(objects1, objects2, ratio) {
   return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.id === o2.id), ratio));
-}
-
-// Determines the best way to rotate (cw or ccw) when interpolating a direction.
-// For example, when rotating from -3 radians to +3 radians, we should really rotate from
-// -3 radians to +3 - 2pi radians.
-function interpolateDirection(d1, d2, ratio) {
-  const absD = Math.abs(d2 - d1);
-  if (absD >= Math.PI) {
-    // The angle between the directions is large - we should rotate the other way
-    if (d1 > d2) {
-      return d1 + (d2 + 2 * Math.PI - d1) * ratio;
-    } else {
-      return d1 - (d2 - 2 * Math.PI - d1) * ratio;
-    }
-  } else {
-    // Normal interp
-    return d1 + (d2 - d1) * ratio;
-  }
 }

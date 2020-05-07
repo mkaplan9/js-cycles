@@ -16,11 +16,11 @@ module.exports = Object.freeze({
   RIGHT: "RIGHT",
   LEFT: "LEFT",
 
-  MAP_SIZE: 360,
+  MAP_SIZE: 420,
   GRID_SIZE: 60,
-  BLOCK_AREA: 360 / 60,
+  BLOCK_AREA: 420 / 60,
   MARGIN: 1,
-  BLOCK_SIZE: 6 - 1,
+  BLOCK_SIZE: 7 - 1,
   MSG_TYPES: {
     JOIN_GAME: 'join_game',
     GAME_UPDATE: 'update',

@@ -24,10 +24,6 @@ class Game {
   addPlayer(socket, username) {
     this.sockets[socket.id] = socket;
 
-    // Generate a position to start this player at.
-    const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
-    const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
-
     // Generate a grid position to start this player at.
     let grid_x;
     let grid_y;
@@ -45,7 +41,7 @@ class Game {
       color = '#DF740C';
     }
 
-    this.players[socket.id] = new Player(socket.id, username, x, y, grid_x, grid_y, grid_dir, color);
+    this.players[socket.id] = new Player(socket.id, username, grid_x, grid_y, grid_dir, color);
   }
 
   removePlayer(socketID) {
@@ -53,9 +49,11 @@ class Game {
     delete this.players[socketID];
   }
 
-  handleInput(socket, dir, grid_dir) {
-    if (this.players[socket.id]) {
-      this.players[socket.id].setDirection(dir, grid_dir);
+  handleInput(socket, grid_dir) {
+    if (this.gameLive) {
+      if (this.players[socket.id]) {
+        this.players[socket.id].setDirection(grid_dir);
+      }
     }
   }
 
@@ -115,7 +113,7 @@ class Game {
     }
 
     // Send a game update to each player every other time
-    if (this.shouldSendUpdate) {
+    if (true) {
       const leaderboard = this.getLeaderboard();
       Object.keys(this.sockets).forEach(playerID => {
         const socket = this.sockets[playerID];
