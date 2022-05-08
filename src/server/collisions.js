@@ -1,9 +1,7 @@
 const Constants = require('../shared/constants');
 
 function applyGridCollisions(players, grid) {
-  for (let i = 0; i < players.length; i++) {
-    player = players[i];
-
+  Object.values(this.players).forEach(player => {
     // Off grid
     if (
       (player.grid_x >= Constants.GRID_SIZE) ||
@@ -19,7 +17,7 @@ function applyGridCollisions(players, grid) {
     } else if (headsHitDamage(player, players)) {
       player.die();
     }
-  }
+  })
 }
 
 function headsHitDamage(player, players) {
@@ -34,6 +32,5 @@ function headsHitDamage(player, players) {
   })
   return false;
 }
-
 
 module.exports = applyGridCollisions;

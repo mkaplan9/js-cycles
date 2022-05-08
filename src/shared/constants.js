@@ -16,4 +16,5 @@ module.exports = Object.freeze({
     GAME_OVER: 'dead',
   },
   UPDATE_INTERVAL_MILLIS: 1000,
+  TOTAL_PLAYERS: 2,
 });

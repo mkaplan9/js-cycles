@@ -1,7 +1,6 @@
-const GridObject = require('./grid_object');
 const Constants = require('../shared/constants');
 
-class Player extends GridObject {
+class Player {
   constructor(socket, username, grid_x, grid_y, grid_dir, color, player_number) {
     this.socket = socket;
     this.username = username;
@@ -34,16 +33,6 @@ class Player extends GridObject {
     this.alive = false;
   }
 
-  serializeForUpdate() {
-    return {
-      id: this.id,
-      grid_x: this.grid_x,
-      grid_y: this.grid_y,
-      color: this.color,
-      alive: this.alive,
-    };
-  }
-
   setDirection(new_grid_dir) {
     if (!this.opposites(new_grid_dir, this.grid_dir)) {
       this.grid_dir = new_grid_dir;
@@ -54,6 +43,15 @@ class Player extends GridObject {
     const rl = [dir_1, dir_2].includes(Constants.LEFT) && [dir_1, dir_2].includes(Constants.RIGHT);
     const ud = [dir_1, dir_2].includes(Constants.UP) && [dir_1, dir_2].includes(Constants.DOWN);
     return rl || ud;
+  }
+
+  serializeForUpdate() {
+    return {
+      grid_x: this.grid_x,
+      grid_y: this.grid_y,
+      color: this.color,
+      alive: this.alive,
+    };
   }
 }
 
