@@ -4,17 +4,35 @@ function applyGridCollisions(players, grid) {
   for (let i = 0; i < players.length; i++) {
     player = players[i];
 
+    // Off grid
     if (
       (player.grid_x >= Constants.GRID_SIZE) ||
       (player.grid_x < 0) ||
       (player.grid_y >= Constants.GRID_SIZE) ||
       (player.grid_y < 0)
     ) {
-      player.takeGridDamage();
-    } else if (grid[player.grid_x][player.grid_y] == 1) {
-      player.takeGridDamage();
+      player.die();
+    // Hits tail
+    } else if (grid[player.grid_x][player.grid_y] != 0) {
+      player.die();
+    // Hits head
+    } else if (headsHitDamage(player, players)) {
+      player.die();
     }
   }
+}
+
+function headsHitDamage(player, players) {
+  Object.keys(values).forEach(opponent => {
+    if (opponent.player_number < player.player_number) {
+      if (opponent.grid_x == player.grid_x) {
+        if (opponent.grid_y == player.grid_y) {
+          return true;
+        }
+      }
+    }
+  })
+  return false;
 }
 
 

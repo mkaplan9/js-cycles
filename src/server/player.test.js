@@ -1,5 +1,4 @@
 const Player = require('./player');
-const Bullet = require('./bullet');
 const Constants = require('../shared/constants');
 
 describe('Player', () => {
@@ -26,29 +25,6 @@ describe('Player', () => {
       player.update(Constants.PLAYER_FIRE_COOLDOWN / 3);
 
       expect(player.update(Constants.PLAYER_FIRE_COOLDOWN / 3)).toBe(null);
-    });
-  });
-  describe('takeBulletDamage', () => {
-    it('should take damage when hit', () => {
-      const player = new Player('123', 'guest');
-
-      const initialHp = player.hp;
-
-      player.takeBulletDamage();
-
-      expect(player.hp).toBeLessThan(initialHp);
-    });
-  });
-
-  describe('onDealtDamage', () => {
-    it('should increment score when dealing damage', () => {
-      const player = new Player('123', 'guest');
-
-      const initialScore = player.score;
-
-      player.onDealtDamage();
-
-      expect(player.score).toBeGreaterThan(initialScore);
     });
   });
 
