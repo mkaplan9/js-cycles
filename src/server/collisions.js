@@ -1,7 +1,7 @@
 const Constants = require('../shared/constants');
 
 function applyGridCollisions(players, grid) {
-  Object.values(this.players).forEach(player => {
+  players.forEach(player => {
     // Off grid
     if (
       (player.grid_x >= Constants.GRID_SIZE) ||
@@ -21,10 +21,10 @@ function applyGridCollisions(players, grid) {
 }
 
 function headsHitDamage(player, players) {
-  Object.keys(values).forEach(opponent => {
+  players.forEach(opponent => {
     if (opponent.player_number < player.player_number) {
-      if (opponent.grid_x == player.grid_x) {
-        if (opponent.grid_y == player.grid_y) {
+      if (opponent.grid_x === player.grid_x) {
+        if (opponent.grid_y === player.grid_y) {
           return true;
         }
       }

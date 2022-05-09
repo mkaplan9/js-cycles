@@ -5,9 +5,9 @@ const { GRID_SIZE, TOTAL_PLAYERS, UPDATE_INTERVAL_MILLIS } = require('../shared/
 
 class Game {
   constructor() {
-    this.players = {};
+    this.socketIdToPlayer = {};
+    this.players = []
     this.grid = this.initGrid();
-    this.shouldSendUpdate = false;
     this.gameLive = false;
     this.gameOver = false;
     this.timeStep = 0;
@@ -19,7 +19,7 @@ class Game {
   }
 
   canAddPlayer() {
-    return Object.keys(this.players).length < TOTAL_PLAYERS
+    return this.players.length < TOTAL_PLAYERS
   }
 
   addPlayer(socket, username) {
@@ -29,7 +29,7 @@ class Game {
     let grid_dir;
     let color;
     let player_number;
-    if (Object.keys(this.players).length === 0) {
+    if (this.players.length === 0) {
       grid_x = Math.floor(GRID_SIZE / 4)
       grid_y = Math.floor(GRID_SIZE / 2)
       grid_dir = Constants.RIGHT;
@@ -43,20 +43,26 @@ class Game {
       player_number = 2;
     }
 
-    this.players[socket.id] = new Player(socket, username, grid_x, grid_y, grid_dir, color, player_number);
+    const player = new Player(socket, username, grid_x, grid_y, grid_dir, color, player_number);
+    this.socketIdToPlayer[socket.id] = player;
+    this.players.push(player);
+
+    this.grid[player.grid_x][player.grid_y] = player.player_number;
+
+    return player;
   }
 
   handleInput(socket, grid_dir) {
     if (this.gameLive) {
-      const player = this.players[socket.id];
-      if (player) {
+      const player = this.socketIdToPlayer[socket.id];
+      if (player && player.alive) {
         player.setDirection(grid_dir);
       }
     }
   }
 
   shouldStartGame() {
-    this.gameLive = (Object.keys(this.players).length === TOTAL_PLAYERS)
+    this.gameLive = (this.players.length === TOTAL_PLAYERS)
   }
 
   update() {
@@ -73,54 +79,48 @@ class Game {
     this.timeStep += 1;
 
     // Move each player
-    Object.values(this.players).forEach(player => {
+    this.players.forEach(player => {
       player.move();
     });
 
     // Apply collisons
-    applyGridCollisions(Object.values(this.players), this.grid);
+    applyGridCollisions(this.players, this.grid);
 
     // Update grid
-    Object.values(this.players).forEach(player => {
+    this.players.forEach(player => {
       if (player.alive) {
-        const {grid_x, grid_y, player_number} = grid_pos;
-        this.grid[grid_x][grid_y] = player_number;
+        this.grid[player.grid_x][player.grid_y] = player.player_number;
       }
     });
 
     // Check if only 1 player left
-    alive_count = Object.values(this.players).reduce((acc, player) => acc + player.alive, 0)
-    if (alive_count < TOTAL_PLAYERS) {
+    const alive_count = this.players.reduce((acc, player) => acc + player.alive, 0)
+    if (alive_count === 1) {
       this.gameLive = false;
       this.gameOver = true;
 
-      winner = Object.values(this.players).filter((player) => player.alive)
+      winner = this.players.filter((player) => player.alive)
       const socket = player.socket;
       socket.emit(Constants.MSG_TYPES.GAME_OVER, player.alive);
       return;
     }
 
-    // Send a game update to each player every other time
+    // Send a game update to each player
     if (this.gameLive) {
-      if (this.shouldSendUpdate) {
-        Object.values(this.players).forEach(player => {
-          if (player.alive) {
-            const socket = player.socket;
-            socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
-          } else {
-            const socket = player.socket;
-            socket.emit(Constants.MSG_TYPES.GAME_OVER, player.alive);
-          }
-        });
-        this.shouldSendUpdate = false;
-      } else {
-        this.shouldSendUpdate = true;
-      }
+      this.players.forEach(player => {
+        if (player.alive) {
+          const socket = player.socket;
+          socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
+        } else {
+          const socket = player.socket;
+          socket.emit(Constants.MSG_TYPES.GAME_OVER, player.alive);
+        }
+      });
     }
   }
 
   createUpdate(player) {
-    const otherPlayers = Object.values(this.players).filter(
+    const otherPlayers = this.players.filter(
       p => p !== player,
     );
     return {
