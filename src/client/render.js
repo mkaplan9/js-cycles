@@ -1,7 +1,6 @@
 // Learn more about this file at:
 // https://victorzhou.com/blog/build-an-io-game-part-1/#5-client-rendering
 import { debounce } from 'throttle-debounce';
-import { getAsset } from './assets';
 import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
@@ -37,11 +36,11 @@ function render() {
   }
 
   // Draw all players
-  renderPlayer2(me);
-  others.forEach(renderPlayer2.bind(null));
+  renderPlayer(me);
+  others.forEach(renderPlayer.bind(null));
 }
 
-function renderBackground2() {
+function renderBackground() {
   // Draw boundaries
   context.strokeStyle = 'black';
   context.fillStyle = 'black';
@@ -74,7 +73,7 @@ function renderColorSquare(color) {
 }
 
 // Renders a snake at the given coordinates
-function renderPlayer2(player) {
+function renderPlayer(player) {
   const { grid_x, grid_y, color } = player;
 
   context.fillStyle = color;
@@ -86,7 +85,7 @@ let renderInterval
 // Replaces main menu rendering with game rendering.
 export function startRendering() {
   clearInterval(renderInterval);
-  renderBackground2();
+  renderBackground();
   renderColorSquare('black');
   hasRenderedID = false;
   renderInterval = setInterval(render, 1000 / 60);

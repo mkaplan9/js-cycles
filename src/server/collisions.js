@@ -1,6 +1,7 @@
 const Constants = require('../shared/constants');
 
 function applyGridCollisions(players, grid) {
+  const oldAlives = players.filter((p) => p.alive)
   players.forEach(player => {
     // Off grid
     if (
@@ -18,6 +19,10 @@ function applyGridCollisions(players, grid) {
       player.die();
     }
   })
+  const newAlives = players.filter((p) => p.alive)
+  if (newAlives.length === 0) {
+    oldAlives[0].alive = true;
+  }
 }
 
 function headsHitDamage(player, players) {

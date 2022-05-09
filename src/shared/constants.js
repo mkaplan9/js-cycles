@@ -5,7 +5,7 @@ module.exports = Object.freeze({
   LEFT: "LEFT",
 
   MAP_SIZE: 600,
-  GRID_SIZE: 100,
+  GRID_SIZE: 10,
   BLOCK_AREA: 600 / 100,
   MARGIN: 1,
   BLOCK_SIZE: 6 - 1,
