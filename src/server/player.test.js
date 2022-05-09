@@ -1,65 +1,81 @@
 const Player = require('./player');
-const Bullet = require('./bullet');
 const Constants = require('../shared/constants');
 
 describe('Player', () => {
-  describe('update', () => {
-    it('should gain score each second', () => {
-      const player = new Player('123', 'guest');
-      const initialScore = player.score;
+  describe('constructor', () => {
+    it('contructs', () => {
+      const socket = {};
+      const player = new Player(socket, "my_username", 0, 0, Constants.UP, "#ffffff", 1);
 
-      player.update(1);
-
-      expect(player.score).toBeGreaterThan(initialScore);
-    });
-
-    it('should fire bullet on update', () => {
-      const player = new Player('123', 'guest');
-
-      expect(player.update(Constants.PLAYER_FIRE_COOLDOWN / 3))
-        .toBeInstanceOf(Bullet);
-    });
-
-    it('should not fire bullet during cooldown', () => {
-      const player = new Player('123', 'guest');
-
-      player.update(Constants.PLAYER_FIRE_COOLDOWN / 3);
-
-      expect(player.update(Constants.PLAYER_FIRE_COOLDOWN / 3)).toBe(null);
-    });
-  });
-  describe('takeBulletDamage', () => {
-    it('should take damage when hit', () => {
-      const player = new Player('123', 'guest');
-
-      const initialHp = player.hp;
-
-      player.takeBulletDamage();
-
-      expect(player.hp).toBeLessThan(initialHp);
-    });
+      expect(player.player_number).toEqual(1);
+    })
   });
 
-  describe('onDealtDamage', () => {
-    it('should increment score when dealing damage', () => {
-      const player = new Player('123', 'guest');
+  describe('move', () => {
+    it('moves', () => {
+      const player = new Player(null, "my_username", 10, 10, Constants.UP, "#ffffff", 1);
 
-      const initialScore = player.score;
+      expect(player.grid_dir).toEqual(Constants.UP);
+      expect(player.grid_x).toEqual(10);
+      expect(player.grid_y).toEqual(10);
 
-      player.onDealtDamage();
+      player.move();
+      player.grid_dir = Constants.RIGHT;
+      player.move();
 
-      expect(player.score).toBeGreaterThan(initialScore);
+      expect(player.grid_dir).toEqual(Constants.RIGHT);
+      expect(player.grid_x).toEqual(11);
+      expect(player.grid_y).toEqual(9);
+    })
+  });
+
+  describe('die', () => {
+    it('returns correct bool', () => {
+      const player = new Player(null, "my_username", 10, 10, Constants.UP, "#ffffff", 1);
+
+      expect(player.alive).toEqual(true);
+      player.die();
+      expect(player.alive).toEqual(false);
+    });
+  });
+
+  describe('setDirection', () => {
+    it('sets direction', () => {
+      const player = new Player(null, "my_username", 10, 10, Constants.UP, "#ffffff", 1);
+
+      expect(player.grid_dir).toEqual(Constants.UP);
+      player.setDirection(Constants.RIGHT);
+      expect(player.grid_dir).toEqual(Constants.RIGHT);
+    });
+
+    it('ignores opposite', () => {
+      const player = new Player(null, "my_username", 10, 10, Constants.UP, "#ffffff", 1);
+
+      expect(player.grid_dir).toEqual(Constants.UP);
+      player.setDirection(Constants.DOWN);
+      expect(player.grid_dir).toEqual(Constants.UP);
+    });
+  });
+
+  describe('opposites', () => {
+    it('opposites', () => {
+      const player = new Player(null, "my_username", 10, 10, Constants.UP, "#ffffff", 1);
+
+      expect(player.opposites(Constants.UP, Constants.DOWN)).toEqual(true);
+      expect(player.opposites(Constants.UP, Constants.LEFT)).toEqual(false);
+      expect(player.opposites(Constants.RIGHT, Constants.LEFT)).toEqual(true);
+      expect(player.opposites(Constants.RIGHT, Constants.DOWN)).toEqual(false);
     });
   });
 
   describe('serializeForUpdate', () => {
-    it('include hp and direction in serialization', () => {
-      const player = new Player('123', 'guest');
+    it('serializes correctly', () => {
+      const player = new Player(null, "my_username", 10, 10, Constants.UP, "#ffffff", 1);
 
       expect(player.serializeForUpdate())
         .toEqual(expect.objectContaining({
-          hp: Constants.PLAYER_MAX_HP,
-          direction: expect.any(Number),
+          alive: true,
+          grid_x: 10,
         }));
     });
   });

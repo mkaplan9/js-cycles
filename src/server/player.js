@@ -1,46 +1,56 @@
-const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
-class Player extends ObjectClass {
-  constructor(id, username, grid_x, grid_y, grid_dir, color) {
-    super(id, grid_x, grid_y, grid_dir, Constants.PLAYER_SPEED, color);
+class Player {
+  constructor(socket, username, grid_x, grid_y, grid_dir, color, player_number) {
+    this.socket = socket;
     this.username = username;
-    this.hp = Constants.PLAYER_MAX_HP;
-    this.fireCooldown = 0;
-    this.score = 0;
+    this.grid_x = grid_x;
+    this.grid_y = grid_y;
+    this.grid_dir = grid_dir;
+    this.color = color;
+    this.player_number = player_number;
+    this.alive = true;
   }
 
-  update(dt) {
-    super.update(dt);
-
-    if (
-      (this.grid_x >= Constants.GRID_SIZE) ||
-      (this.grid_x < 0) ||
-      (this.grid_y >= Constants.GRID_SIZE) ||
-      (this.grid_y < 0)
-    ) {
-      return null;
+  move() {
+    switch(this.grid_dir) {
+      case Constants.LEFT:
+        this.grid_x--;
+        break;
+      case Constants.UP:
+        this.grid_y--;
+        break;
+      case Constants.RIGHT:
+        this.grid_x++;
+        break;
+      case Constants.DOWN:
+        this.grid_y++;
+        break;
     }
-
-    return { grid_x: this.grid_x, grid_y: this.grid_y };
   }
 
-  takeBulletDamage() {
-    this.hp -= Constants.BULLET_DAMAGE;
+  die() {
+    this.alive = false;
   }
 
-  takeGridDamage() {
-    this.hp = 0;
+  setDirection(new_grid_dir) {
+    if (!this.opposites(new_grid_dir, this.grid_dir)) {
+      this.grid_dir = new_grid_dir;
+    }
   }
 
-  onDealtDamage() {
-    this.score += Constants.SCORE_BULLET_HIT;
+  opposites(dir_1, dir_2) {
+    const rl = [dir_1, dir_2].includes(Constants.LEFT) && [dir_1, dir_2].includes(Constants.RIGHT);
+    const ud = [dir_1, dir_2].includes(Constants.UP) && [dir_1, dir_2].includes(Constants.DOWN);
+    return rl || ud;
   }
 
   serializeForUpdate() {
     return {
-      ...(super.serializeForUpdate()),
-      hp: this.hp,
+      grid_x: this.grid_x,
+      grid_y: this.grid_y,
+      color: this.color,
+      alive: this.alive,
     };
   }
 }

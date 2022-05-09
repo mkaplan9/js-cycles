@@ -1,16 +1,4 @@
 module.exports = Object.freeze({
-  PLAYER_RADIUS: 20,
-  PLAYER_MAX_HP: 100,
-  PLAYER_SPEED: 100,
-  PLAYER_FIRE_COOLDOWN: 0.01,
-
-  BULLET_RADIUS: 3,
-  BULLET_SPEED: 800,
-  BULLET_DAMAGE: 101,
-
-  SCORE_BULLET_HIT: 20,
-  SCORE_PER_SECOND: 1,
-
   UP: "UP",
   DOWN: "DOWN",
   RIGHT: "RIGHT",
@@ -27,4 +15,6 @@ module.exports = Object.freeze({
     INPUT: 'input',
     GAME_OVER: 'dead',
   },
+  UPDATE_INTERVAL_MILLIS: 1000,
+  TOTAL_PLAYERS: 2,
 });
