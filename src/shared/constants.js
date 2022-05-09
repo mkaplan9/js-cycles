@@ -6,8 +6,7 @@ module.exports = Object.freeze({
 
   MAP_SIZE: 600,
   GRID_SIZE: 10,
-  BLOCK_AREA: 600 / 100,
-  MARGIN: 1,
+  MARGIN: 2,
   BLOCK_SIZE: 6 - 1,
   MSG_TYPES: {
     JOIN_GAME: 'join_game',
@@ -17,4 +16,5 @@ module.exports = Object.freeze({
   },
   UPDATE_INTERVAL_MILLIS: 1000,
   TOTAL_PLAYERS: 2,
+  SCALE_MIN: 800,
 });

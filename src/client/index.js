@@ -4,8 +4,6 @@ import { connect, play } from './networking';
 import { startRendering, stopRendering } from './render';
 import { startCapturingInput, stopCapturingInput } from './input';
 import { downloadAssets } from './assets';
-import { initState } from './state';
-import { setLeaderboardHidden } from './leaderboard';
 
 // I'm using Bootstrap here for convenience, but I wouldn't recommend actually doing this for a real
 // site. It's heavy and will slow down your site - either only use a subset of Bootstrap, or just
@@ -35,10 +33,8 @@ Promise.all([
     gameOverMenu.classList.add('hidden');
     wonMsg.classList.add('hidden');
     lostMsg.classList.add('hidden');
-    initState();
     startCapturingInput();
     startRendering();
-    setLeaderboardHidden(false);
   };
   playAgainButton.onclick = () => {
     // Play!
@@ -47,10 +43,8 @@ Promise.all([
     gameOverMenu.classList.add('hidden');
     wonMsg.classList.add('hidden');
     lostMsg.classList.add('hidden');
-    initState();
     startCapturingInput();
     startRendering();
-    setLeaderboardHidden(false);
   };
 }).catch(console.error);
 
@@ -63,5 +57,4 @@ function onGameOver(won) {
   } else {
     lostMsg.classList.remove('hidden');
   }
-  setLeaderboardHidden(true);
 }

@@ -5,8 +5,9 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { MAP_SIZE, GRID_SIZE, BLOCK_AREA, MARGIN } = Constants;
+const { MAP_SIZE, GRID_SIZE, MARGIN, SCALE_MIN } = Constants;
 let hasRenderedID = false;
+const BLOCK_AREA = MAP_SIZE / GRID_SIZE;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -16,7 +17,7 @@ setCanvasDimensions();
 function setCanvasDimensions() {
   // On small screens (e.g. phones), we want to "zoom out" so players can still see at least
   // 800 in-game units of width.
-  const scaleRatio = Math.max(1, 800 / window.innerWidth);
+  const scaleRatio = Math.max(1, SCALE_MIN / window.innerWidth);
   canvas.width = scaleRatio * window.innerWidth;
   canvas.height = scaleRatio * window.innerHeight;
 }
@@ -42,20 +43,20 @@ function render() {
 
 function renderBackground() {
   // Draw boundaries
-  context.strokeStyle = 'black';
-  context.fillStyle = 'black';
+  context.strokeStyle = 'blue';
+  context.fillStyle = 'blue';
   context.lineWidth = 1;
-  context.strokeRect(0, 0, MAP_SIZE, MAP_SIZE);
-  context.fillRect(0, 0, MAP_SIZE, MAP_SIZE);
+  context.strokeRect(0, 0, MAP_SIZE + MARGIN, MAP_SIZE + MARGIN);
+  context.fillRect(0, 0, MAP_SIZE + MARGIN, MAP_SIZE + MARGIN);
 
   // Draw grid
-  const grid_block_area = BLOCK_AREA * 4;
-  const grid_block_size = grid_block_area - MARGIN;
-  for(let x=0; x<GRID_SIZE/4; x++) {
-    for(let y=0; y<GRID_SIZE/4; y++) {
+  const grid_block_size = BLOCK_AREA - MARGIN;
+
+  for(let x=0; x<GRID_SIZE; x++) {
+    for(let y=0; y<GRID_SIZE; y++) {
       context.fillStyle = 'lightgrey';
-      context.clearRect(x * grid_block_area, y * grid_block_area, grid_block_size, grid_block_size);
-      context.fillRect(x * grid_block_area, y * grid_block_area, grid_block_size, grid_block_size);
+      context.clearRect(MARGIN + x * BLOCK_AREA, MARGIN + y * BLOCK_AREA, grid_block_size, grid_block_size);
+      context.fillRect(MARGIN + x * BLOCK_AREA, MARGIN + y * BLOCK_AREA, grid_block_size, grid_block_size);
     }
   }
 }
@@ -77,7 +78,7 @@ function renderPlayer(player) {
   const { grid_x, grid_y, color } = player;
 
   context.fillStyle = color;
-  context.fillRect(grid_x * BLOCK_AREA, grid_y * BLOCK_AREA, BLOCK_AREA, BLOCK_AREA);
+  context.fillRect(MARGIN / 2 + grid_x * BLOCK_AREA, MARGIN / 2 + grid_y * BLOCK_AREA, BLOCK_AREA, BLOCK_AREA);
 }
 
 let renderInterval
