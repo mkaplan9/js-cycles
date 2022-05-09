@@ -1,5 +1,3 @@
-// Learn more about this file at:
-// https://victorzhou.com/blog/build-an-io-game-part-1/#7-client-state
 import { updateLeaderboard } from './leaderboard';
 
 // The "current" state will always be RENDER_DELAY ms behind server time.
@@ -8,17 +6,17 @@ const RENDER_DELAY = 100;
 
 let gameUpdates = [];
 let gameStart = 0;
-let firstServerTimestamp = 0;
+let firstServerTimeStep = 0;
 
 export function initState() {
   gameUpdates = [];
   gameStart = 0;
-  firstServerTimestamp = 0;
+  firstServerTimeStep = 0;
 }
 
 export function processGameUpdate(update) {
-  if (!firstServerTimestamp) {
-    firstServerTimestamp = update.t;
+  if (!firstServerTimeStep) {
+    firstServerTimeStep = update.t;
     gameStart = Date.now();
   }
   gameUpdates.push(update);
@@ -30,11 +28,6 @@ export function processGameUpdate(update) {
   if (base > 0) {
     gameUpdates.splice(0, base);
   }
-}
-
-function currentServerTime() {
-  // serverTime + (time since game start) - delay
-  return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY;
 }
 
 // Returns the index of the base update, the first game update before
@@ -51,7 +44,7 @@ function getBaseUpdate() {
 
 // Returns { me, others }
 export function getCurrentState() {
-  if (!firstServerTimestamp) {
+  if (!firstServerTimeStep) {
     return {};
   }
 

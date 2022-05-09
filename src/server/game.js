@@ -47,9 +47,28 @@ class Game {
     this.socketIdToPlayer[socket.id] = player;
     this.players.push(player);
 
-    this.grid[player.grid_x][player.grid_y] = player.player_number;
+    this.grid[grid_x][grid_y] = player_number;
 
     return player;
+  }
+
+  removePlayer(socket) {
+    const player = this.socketIdToPlayer[socket.id];
+    if (player) {
+      if (player.alive) {
+        player.die();
+      }
+
+      if (!this.gameLive) {
+        const removeIndex = this.players.indexOf(player)
+        this.players.splice(removeIndex, 1);
+        this.players.forEach((player, i) => {
+          player.player_number = i;
+        })
+
+        delete this.socketIdToPlayer[socket.id]
+      }
+    }
   }
 
   handleInput(socket, grid_dir) {
@@ -86,24 +105,25 @@ class Game {
     // Apply collisons
     applyGridCollisions(this.players, this.grid);
 
-    // Update grid
-    this.players.forEach(player => {
-      if (player.alive) {
-        this.grid[player.grid_x][player.grid_y] = player.player_number;
-      }
-    });
-
     // Check if only 1 player left
     const alive_count = this.players.reduce((acc, player) => acc + player.alive, 0)
     if (alive_count === 1) {
       this.gameLive = false;
       this.gameOver = true;
 
-      winner = this.players.filter((player) => player.alive)
-      const socket = player.socket;
-      socket.emit(Constants.MSG_TYPES.GAME_OVER, player.alive);
+      this.players.forEach(player => {
+        const socket = player.socket;
+        socket.emit(Constants.MSG_TYPES.GAME_OVER, player.alive);
+      })
       return;
     }
+
+    // Update grid
+    this.players.forEach(player => {
+      if (player.alive) {
+        this.grid[player.grid_x][player.grid_y] = player.player_number;
+      }
+    });
 
     // Send a game update to each player
     if (this.gameLive) {
