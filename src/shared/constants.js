@@ -3,6 +3,7 @@ module.exports = Object.freeze({
   DOWN: "DOWN",
   RIGHT: "RIGHT",
   LEFT: "LEFT",
+  PAUSE: "P",
 
   MAP_SIZE: 600,
   GRID_SIZE: 10,

@@ -9,6 +9,7 @@ class Game {
     this.players = []
     this.grid = this.initGrid();
     this.gameLive = false;
+    this.gamePaused = false;
     this.gameOver = false;
     this.timeStep = 0;
     setInterval(this.update.bind(this), UPDATE_INTERVAL_MILLIS);
@@ -74,6 +75,13 @@ class Game {
   handleInput(socket, grid_dir) {
     if (this.gameLive) {
       const player = this.socketIdToPlayer[socket.id];
+
+      // Allow anyone to pause for dev purposes
+      if (grid_dir == Constants.PAUSE) {
+        this.gamePaused = !this.gamePaused;
+        return;
+      }
+
       if (player && player.alive) {
         player.setDirection(grid_dir);
       }
@@ -85,7 +93,7 @@ class Game {
   }
 
   update() {
-    if (this.gameOver) {
+    if (this.gameOver || this.gamePaused) {
       return;
     }
 
