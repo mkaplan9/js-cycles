@@ -19,7 +19,6 @@
   </script>
 </head>
 <body>
-  <canvas id="game-canvas"></canvas>
   <div id="play-menu" class="hidden menu">
     <h1>JS Cycles</h1>
     <p>
@@ -36,6 +35,12 @@
     <input type="text" id="username-input" placeholder="Username" />
     <button id="play-button">PLAY</button>
   </div>
+  <div id="waiting-page" class="hidden menu">
+    <div>
+      <h2>Waiting for other players</h2>
+    </div>
+  </div>
+  <canvas id="game-canvas" class="hidden"></canvas>
   <div id="game-over-menu" class="hidden menu">
     <h1 id="you-won" class="hidden">You Won</h1>
     <h1 id="you-lost" class="hidden">You Lost</h1>
