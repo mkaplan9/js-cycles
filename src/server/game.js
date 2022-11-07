@@ -102,6 +102,7 @@ class Game {
       if (this.gameLive) {
         this.players.forEach(player => {
           const socket = player.socket;
+          socket.emit(Constants.MSG_TYPES.GAME_START);
           socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
         });
       }

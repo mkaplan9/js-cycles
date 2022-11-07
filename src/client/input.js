@@ -22,6 +22,8 @@ function onKeyInput(e) {
     grid_dir = Constants.RIGHT;
   } else if (e.keyCode === 40) { // down arrow
     grid_dir = Constants.DOWN;
+  } else if (e.keyCode === 80) { // letter p
+    grid_dir = Constants.PAUSE;
   }
 
   updateDirection(grid_dir);
@@ -36,4 +38,5 @@ export function startCapturingInput() {
 export function stopCapturingInput() {
   window.removeEventListener('mousemove', onMouseInput);
   window.removeEventListener('click', onMouseInput);
+  window.removeEventListener('keydown', onMouseInput);
 }

@@ -19,9 +19,11 @@ const playAgainButton = document.getElementById('play-again-button');
 const wonMsg = document.getElementById('you-won');
 const lostMsg = document.getElementById('you-lost');
 const usernameInput = document.getElementById('username-input');
+const waitingPage = document.getElementById('waiting-page');
+const gameCanvas = document.getElementById('game-canvas');
 
 Promise.all([
-  connect(onGameOver),
+  connect(onGameStart, onGameOver),
   downloadAssets(),
 ]).then(() => {
   playMenu.classList.remove('hidden');
@@ -29,24 +31,23 @@ Promise.all([
   playButton.onclick = () => {
     // Play!
     play(usernameInput.value);
-    playMenu.classList.add('hidden');
-    gameOverMenu.classList.add('hidden');
-    wonMsg.classList.add('hidden');
-    lostMsg.classList.add('hidden');
+    hideAllExcept(waitingPage)
     startCapturingInput();
     startRendering();
   };
   playAgainButton.onclick = () => {
+    connect(onGameStart, onGameOver),
     // Play!
     play(usernameInput.value);
-    playMenu.classList.add('hidden');
-    gameOverMenu.classList.add('hidden');
-    wonMsg.classList.add('hidden');
-    lostMsg.classList.add('hidden');
+    hideAllExcept(waitingPage)
     startCapturingInput();
     startRendering();
   };
 }).catch(console.error);
+
+function onGameStart() {
+  hideAllExcept(gameCanvas)
+}
 
 function onGameOver(won) {
   stopCapturingInput();
@@ -57,4 +58,15 @@ function onGameOver(won) {
   } else {
     lostMsg.classList.remove('hidden');
   }
+}
+
+function hideAllExcept(pageToShow) {
+  playMenu.classList.add('hidden');
+  gameOverMenu.classList.add('hidden');
+  wonMsg.classList.add('hidden');
+  lostMsg.classList.add('hidden');
+  waitingPage.classList.add('hidden');
+  gameCanvas.classList.add('hidden');
+
+  pageToShow.classList.remove('hidden');
 }
