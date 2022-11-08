@@ -4,6 +4,7 @@ import { connect, play } from './networking';
 import { startRendering, stopRendering } from './render';
 import { startCapturingInput, stopCapturingInput } from './input';
 import { downloadAssets } from './assets';
+import { clearGameUpdates } from './state';
 
 // I'm using Bootstrap here for convenience, but I wouldn't recommend actually doing this for a real
 // site. It's heavy and will slow down your site - either only use a subset of Bootstrap, or just
@@ -33,19 +34,22 @@ Promise.all([
     play(usernameInput.value);
     hideAllExcept(waitingPage)
     startCapturingInput();
+    clearGameUpdates()
     startRendering();
   };
   playAgainButton.onclick = () => {
     connect(onGameStart, onGameOver),
     // Play!
     play(usernameInput.value);
-    hideAllExcept(waitingPage)
+    hideAllExcept(waitingPage);
     startCapturingInput();
+    clearGameUpdates()
     startRendering();
   };
 }).catch(console.error);
 
 function onGameStart() {
+  
   hideAllExcept(gameCanvas)
 }
 

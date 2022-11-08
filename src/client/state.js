@@ -7,3 +7,7 @@ export function processGameUpdate(update) {
 export function getCurrentState() {
   return gameUpdates[gameUpdates.length - 1];
 }
+
+export function clearGameUpdates() {
+  gameUpdates = [];
+}

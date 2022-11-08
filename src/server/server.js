@@ -4,7 +4,7 @@ const socketio = require('socket.io');
 
 const Constants = require('../shared/constants');
 const Game = require('./game');
-
+const { TOTAL_PLAYERS } = require('../shared/constants');
 
 // Setup an Express server
 const app = express();
@@ -29,6 +29,8 @@ console.log(`Server listening on port ${port}`);
 
 // Setup socket.io
 const io = socketio(server);
+const liveGames = [];
+const playerToGame = {};
 
 // Listen for socket.io connections
 io.on('connection', socket => {
@@ -39,19 +41,35 @@ io.on('connection', socket => {
   socket.on('disconnect', onDisconnect);
 });
 
-// Setup the Game
-const game = new Game();
+function findGameToJoin() {
+  let game = liveGames.find(game =>
+    !game.gameOver && game.players.length < TOTAL_PLAYERS
+  )
+
+  if (!game) {
+    game = new Game();
+    liveGames.push(game);
+  }
+
+  return game;
+}
+
+function findGame(socket) {
+  return playerToGame[socket.id]
+}
 
 function joinGame(username) {
-  if (game.canAddPlayer()) {
-    game.addPlayer(this, username);
-  }
+  const game = findGameToJoin();
+  playerToGame[this.id] = game;
+  game.addPlayer(this, username);
 }
 
 function handleInput(grid_dir) {
+  const game = findGame(this);
   game.handleInput(this, grid_dir);
 }
 
 function onDisconnect() {
+  const game = findGame(this);
   game.removePlayer(this);
 }
