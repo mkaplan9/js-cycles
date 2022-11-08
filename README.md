@@ -48,13 +48,10 @@ $ npm test
 
 
 ## Thoughts
-- Home screen
-  - No socket
-  - Click join
-  - Redirect to waiting page
 - Waiting page
   - Socket connects
   - Timer starts when 2 people enter
   - Timer resets when down to 1
   - Game starts when people == MAX_PEOPLE || timer goes to 0
-- Gameplay like it is now
+- Scrolling
+- Game speed and size
