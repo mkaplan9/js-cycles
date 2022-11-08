@@ -71,5 +71,7 @@ function handleInput(grid_dir) {
 
 function onDisconnect() {
   const game = findGame(this);
-  game.removePlayer(this);
+  if (game) {
+    game.removePlayer(this);
+  }
 }
