@@ -15,8 +15,7 @@ const context = canvas.getContext('2d');
 setCanvasDimensions();
 
 function setCanvasDimensions() {
-  // On small screens (e.g. phones), we want to "zoom out" so players can still see at least
-  // 800 in-game units of width.
+  // On small screens (e.g. phones), we want to "zoom out" so players can still see
   const scaleRatio = Math.max(1, SCALE_MIN / window.innerWidth);
   canvas.width = scaleRatio * window.innerWidth;
   canvas.height = scaleRatio * window.innerHeight;
@@ -25,20 +24,20 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 function render() {
-  const { me, others } = getCurrentState();
-  if (!me) {
+  const serialized_state = getCurrentState();
+  if (!serialized_state || !serialized_state.me) {
     return;
   }
 
   if (!hasRenderedID) {
     renderID();
-    renderColorSquare(me.color);
+    renderColorSquare(serialized_state.me.color);
     hasRenderedID = true;
   }
 
   // Draw all players
-  renderPlayer(me);
-  others.forEach(renderPlayer.bind(null));
+  renderPlayer(serialized_state.me);
+  serialized_state.others.forEach(renderPlayer.bind(null));
 }
 
 function renderBackground() {
@@ -92,7 +91,6 @@ export function startRendering() {
   renderInterval = setInterval(render, 1000 / 60);
 }
 
-// Replaces game rendering with main menu rendering.
 export function stopRendering() {
   clearInterval(renderInterval);
 }
