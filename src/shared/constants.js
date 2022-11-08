@@ -5,10 +5,9 @@ module.exports = Object.freeze({
   LEFT: "LEFT",
   PAUSE: "P",
 
-  MAP_SIZE: 600,
-  GRID_SIZE: 10,
+  MAP_SIZE: 576,
+  GRID_SIZE: 96,
   MARGIN: 2,
-  BLOCK_SIZE: 6 - 1,
   MSG_TYPES: {
     JOIN_GAME: 'join_game',
     GAME_UPDATE: 'update',
@@ -16,7 +15,7 @@ module.exports = Object.freeze({
     INPUT: 'input',
     GAME_OVER: 'dead',
   },
-  UPDATE_INTERVAL_MILLIS: 1000,
+  UPDATE_INTERVAL_MILLIS: 100,
   TOTAL_PLAYERS: 2,
   SCALE_MIN: 800,
 });

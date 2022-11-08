@@ -10,12 +10,15 @@ function applyGridCollisions(players, grid) {
       (player.grid_y >= Constants.GRID_SIZE) ||
       (player.grid_y < 0)
     ) {
+      console.log(player.player_number + " " + "off grid")
       player.die();
     // Hits tail
     } else if (grid[player.grid_x][player.grid_y] != 0) {
+      console.log(player.player_number + " " + "hit tail")
       player.die();
     // Hits head
     } else if (headsHitDamage(player, players)) {
+      console.log(player.player_number + " " + "hit head")
       player.die();
     }
   })
