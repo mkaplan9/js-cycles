@@ -26,7 +26,11 @@ function onKeyInput(e) {
     grid_dir = Constants.PAUSE;
   }
 
-  updateDirection(grid_dir);
+  console.log(grid_dir)
+
+  if (grid_dir) {
+    updateDirection(grid_dir);
+  }
 }
 
 export function startCapturingInput() {

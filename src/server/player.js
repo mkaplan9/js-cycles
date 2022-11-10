@@ -7,6 +7,7 @@ class Player {
     this.grid_x = grid_x;
     this.grid_y = grid_y;
     this.grid_dir = grid_dir;
+    this.last_move = grid_dir;
     this.color = color;
     this.player_number = player_number;
     this.alive = true;
@@ -27,6 +28,7 @@ class Player {
         this.grid_y++;
         break;
     }
+    this.last_move = this.grid_dir; // Hopefully this clones
   }
 
   die() {
@@ -34,7 +36,7 @@ class Player {
   }
 
   setDirection(new_grid_dir) {
-    if (!this.opposites(new_grid_dir, this.grid_dir)) {
+    if (!this.opposites(new_grid_dir, this.last_move)) {
       this.grid_dir = new_grid_dir;
     }
   }

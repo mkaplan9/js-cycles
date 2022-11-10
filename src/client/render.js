@@ -7,7 +7,9 @@ const Constants = require('../shared/constants');
 
 const { MAP_SIZE, GRID_SIZE, MARGIN, SCALE_MIN } = Constants;
 let hasRenderedID = false;
-const BLOCK_AREA = MAP_SIZE / GRID_SIZE;
+const SNAKES_PER_GRID = 4;
+const SNAKE_BLOCK_FULL = MAP_SIZE / GRID_SIZE; // 6
+const GRID_BLOCK_FULL = SNAKE_BLOCK_FULL * SNAKES_PER_GRID; // 24
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -48,14 +50,14 @@ function renderBackground() {
   context.strokeRect(0, 0, MAP_SIZE + MARGIN, MAP_SIZE + MARGIN);
   context.fillRect(0, 0, MAP_SIZE + MARGIN, MAP_SIZE + MARGIN);
 
-  // Draw grid
-  const grid_block_size = BLOCK_AREA - MARGIN;
+  const gridBlockDraw = GRID_BLOCK_FULL - MARGIN;
 
-  for(let x=0; x<GRID_SIZE; x++) {
-    for(let y=0; y<GRID_SIZE; y++) {
+  // Draw grid
+  for(let x=0; x<GRID_SIZE/SNAKES_PER_GRID; x++) { // 24
+    for(let y=0; y<GRID_SIZE/SNAKES_PER_GRID; y++) { // 24
       context.fillStyle = 'lightgrey';
-      context.clearRect(MARGIN + x * BLOCK_AREA, MARGIN + y * BLOCK_AREA, grid_block_size, grid_block_size);
-      context.fillRect(MARGIN + x * BLOCK_AREA, MARGIN + y * BLOCK_AREA, grid_block_size, grid_block_size);
+      context.clearRect(MARGIN + x * GRID_BLOCK_FULL, MARGIN + y * GRID_BLOCK_FULL, gridBlockDraw, gridBlockDraw);
+      context.fillRect(MARGIN + x * GRID_BLOCK_FULL, MARGIN + y * GRID_BLOCK_FULL, gridBlockDraw, gridBlockDraw);
     }
   }
 }
@@ -77,7 +79,7 @@ function renderPlayer(player) {
   const { grid_x, grid_y, color } = player;
 
   context.fillStyle = color;
-  context.fillRect(MARGIN / 2 + grid_x * BLOCK_AREA, MARGIN / 2 + grid_y * BLOCK_AREA, BLOCK_AREA, BLOCK_AREA);
+  context.fillRect(MARGIN / 2 + grid_x * SNAKE_BLOCK_FULL, MARGIN / 2 + grid_y * SNAKE_BLOCK_FULL, SNAKE_BLOCK_FULL, SNAKE_BLOCK_FULL);
 }
 
 let renderInterval

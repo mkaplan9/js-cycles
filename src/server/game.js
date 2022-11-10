@@ -2,6 +2,7 @@ const Constants = require('../shared/constants');
 const Player = require('./player');
 const applyGridCollisions = require('./collisions');
 const { GRID_SIZE, TOTAL_PLAYERS, UPDATE_INTERVAL_MILLIS } = require('../shared/constants');
+const colors = ['#80FFE8', '#F7B2BD', '#2978A0', '#FFB86F', '#C1666B', '#C455A8']
 
 class Game {
   constructor() {
@@ -30,19 +31,16 @@ class Game {
     let grid_dir;
     let color;
     let player_number;
-    if (this.players.length === 0) {
-      grid_x = Math.floor(GRID_SIZE / 4)
-      grid_y = Math.floor(GRID_SIZE / 2)
-      grid_dir = Constants.RIGHT;
-      color = '#6FC3DF';
-      player_number = 1;
-    } else {
-      grid_x = Math.floor(GRID_SIZE * (3 / 4))
-      grid_y = Math.floor(GRID_SIZE / 2)
-      grid_dir = Constants.LEFT;
-      color = '#DF740C';
-      player_number = 2;
-    }
+
+    const rightLeft = this.players.length % 2;
+    const verticalLevel = Math.floor(this.players.length/2);
+    const quarterGrid = Math.floor(GRID_SIZE / 4);
+
+    grid_x = quarterGrid * (rightLeft * 2 + 1);
+    grid_y = quarterGrid * (verticalLevel + 1);
+    grid_dir = (rightLeft == 0 ? Constants.RIGHT : Constants.LEFT);
+    color = colors[this.players.length]
+    player_number = this.players.length + 1;
 
     const player = new Player(socket, username, grid_x, grid_y, grid_dir, color, player_number);
     this.socketIdToPlayer[socket.id] = player;
